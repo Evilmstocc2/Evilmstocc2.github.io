@@ -401,7 +401,7 @@
                 .attr("width", 600)
                 .attr("height", object_keys_length*25 + 20)
                 .append("g")
-                .attr("transform", "translate(" + 200 + "," + 20 + ")");
+                .attr("transform", "translate(" + margin + "," + 20 + ")");
             svg_legend.selectAll("mydots")
                 .data(object_keys)
                 .enter()
