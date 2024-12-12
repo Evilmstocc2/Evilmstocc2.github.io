@@ -5,10 +5,10 @@ myurl = "https://liangfgithub.github.io/MovieData/movies.dat?raw=true"
 myurlrating = "https://liangfgithub.github.io/MovieData/ratings.dat?raw=true"
 
 # Read ratings and movies data
-ratings = pd.read_csv('ratings.dat', sep='::', engine='python',
+ratings = pd.read_csv(myurlrating, sep='::', engine='python',
                     names=['UserID', 'MovieID', 'Rating', 'Timestamp'])
 
-movies = pd.read_csv('movies.dat', sep='::', engine='python', 
+movies = pd.read_csv(myurl, sep='::', engine='python', 
                     names=['MovieID', 'Title', 'Genres'], encoding='ISO-8859-1')
 
 movies['MovieID'] = movies['MovieID'].astype(int)
