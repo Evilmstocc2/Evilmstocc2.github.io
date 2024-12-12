@@ -29,7 +29,7 @@ filtered_movies = movie_stats[
 ].copy()
 
 # Step 5: Select and arrange columns
-filtered_movies = filtered_movies[['Title', 'ave_ratings', 'ratings_per_movie']].sort_values(
+filtered_movies = filtered_movies[['Title', 'ave_ratings', 'ratings_per_movie', 'MovieID']].sort_values(
     by=[ 'ratings_per_movie'], ascending=[ False]
 )
 
