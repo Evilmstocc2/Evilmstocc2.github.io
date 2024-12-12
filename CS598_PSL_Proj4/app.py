@@ -159,7 +159,7 @@ def get_movie_card(movie, with_rating=False):
                 ),
                 dbc.CardBody(
                     [
-                        html.H6(movie.title, className="card-title text-center"),
+                        html.H6(movie.Title, className="card-title text-center"),
                     ]
                 ),
             ]
