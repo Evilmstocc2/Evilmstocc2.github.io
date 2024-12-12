@@ -154,7 +154,7 @@ def get_movie_card(movie, with_rating=False):
         dbc.Card(
             [
                 dbc.CardImg(
-                    src=f"https://liangfgithub.github.io/MovieImages/{movie.movie_id}.jpg?raw=true",
+                    src=f"https://liangfgithub.github.io/MovieImages/{movie.MovieID}.jpg?raw=true",
                     top=True,
                 ),
                 dbc.CardBody(
@@ -174,7 +174,7 @@ def get_movie_card(movie, with_rating=False):
                             {"label": "5", "value": "5"},
                         ],
                         className="text-center",
-                        id={"type": "movie_rating", "movie_id": movie.movie_id},
+                        id={"type": "movie_rating", "movie_id": movie.MovieID},
                         inputClassName="m-1",
                         labelClassName="px-1",
                     )
