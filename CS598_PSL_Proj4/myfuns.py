@@ -37,7 +37,7 @@ filtered_movies = filtered_movies[['Title', 'ave_ratings', 'ratings_per_movie']]
 top_10_movies = filtered_movies.head(10)
 
 genres = list(
-    sorted(set([genre for genres in movies.genres.unique() for genre in genres.split("|")]))
+    sorted(set([genre for genres in movies.Genres.unique() for genre in genres.split("|")]))
 )
 
 def get_displayed_movies():
