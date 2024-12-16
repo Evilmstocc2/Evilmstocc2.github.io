@@ -13,7 +13,8 @@ def myIBCF(w,S, n = 10):
     unrated_indices = np.where(np.isnan(w))[0]
     # where user did rate
     rated_indices = np.where(~np.isnan(w))[0]
-
+    # print(unrated_indices)
+    # print(rated_indices)
     recommend = np.zeros_like(w)
     for i in unrated_indices:
 
@@ -38,7 +39,6 @@ myurl = "https://liangfgithub.github.io/MovieData/movies.dat?raw=true"
 myurlrating = "https://liangfgithub.github.io/MovieData/ratings.dat?raw=true"
 rmaturl = "https://github.com/Evilmstocc2/Evilmstocc2.github.io/raw/refs/heads/main/CS598_PSL_Proj4/single_R_Row.csv?raw=true"
 
-R_onerow = pd.read_csv(rmaturl, index_col=0)
 
 # Read ratings and movies data
 ratings = pd.read_csv(myurlrating, sep='::', engine='python',
@@ -47,13 +47,19 @@ ratings = pd.read_csv(myurlrating, sep='::', engine='python',
 movies = pd.read_csv(myurl, sep='::', engine='python', 
                     names=['MovieID', 'Title', 'Genres'], encoding='ISO-8859-1')
 
-movies['MovieID'] = movies['MovieID'].astype(int)
+movies["MovieID"] = movies["MovieID"].astype(int)
 
 # because of memory constraints and the fact that I do not want to remake the whole S matrix
 # we shall filter here. every. time. because I dont care.
-first100 = R_onerow.columns[0:100]
-first100_index = [eval(first100[1:]) - 1 for first100 in first100]
-first100movies = movies.iloc[first100_index]
+R_onerow = pd.read_csv(rmaturl, index_col=0)
+R_col = R_onerow.columns
+R_col_num = [eval(i[1:]) for i in R_col]
+R_ind = []
+for i in range(len(R_col)):
+    R_ind.append(np.where(movies['MovieID'] == R_col_num[i])[0][0])
+R_sorted_movies = movies.iloc[R_ind].reset_index(drop=True)
+
+# print(R_sorted_movies)
 
 # Step 1: Group by MovieID to calculate average ratings and rating counts
 movie_stats = ratings.groupby('MovieID').agg(
@@ -108,21 +114,24 @@ input_parsed_S = input_parsed_S[:,0:100]
 response = None
 
 def get_displayed_movies():
-    return first100movies
+    return R_sorted_movies.head(100)
 
 def get_recommended_movies(new_user_ratings):
     # getting temporary structure.
-    wtemp = R_onerow.iloc[[0]].copy()
+    wtemp = R_onerow.iloc[0:1].copy()
     wtemp = wtemp.replace(wtemp.values, np.nan)
     for key, value in new_user_ratings.items():
+        # print(key, value)
         wtemp.loc["u1", f"m{key}"] = value
     w = wtemp.values[0]
+    # print(w)
+    # print(len(w))
     results = myIBCF(w,input_parsed_S, n = 10)
 
     if len(results) > 0 and results[0] == -1:
         return top_10_movies
     
-    return movies.iloc[results]
+    return R_sorted_movies.iloc[results]
 
 def get_popular_movies(genre: str):
     return top_10_movies
