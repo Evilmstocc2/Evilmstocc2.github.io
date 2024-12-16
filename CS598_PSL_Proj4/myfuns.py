@@ -49,6 +49,11 @@ movies = pd.read_csv(myurl, sep='::', engine='python',
 
 movies['MovieID'] = movies['MovieID'].astype(int)
 
+# because of memory constraints and the fact that I do not want to remake the whole S matrix
+# we shall filter here. every. time. because I dont care.
+first100 = R_onerow.columns[0:100]
+first100_index = [eval(first100[1:]) - 1 for first100 in first100]
+first100movies = movies.iloc[first100_index]
 
 # Step 1: Group by MovieID to calculate average ratings and rating counts
 movie_stats = ratings.groupby('MovieID').agg(
@@ -66,11 +71,15 @@ filtered_movies = movie_stats[
 
 # Step 5: Select and arrange columns
 filtered_movies = filtered_movies[['Title', 'ave_ratings', 'ratings_per_movie', 'MovieID']].sort_values(
-    by=[ 'ratings_per_movie'], ascending=[ False]
+    by=[ 'ratings_per_movie'], ascending=[False]
 )
 
 # Step 6: Display only the top 10 rows
 top_10_movies = filtered_movies.head(10)
+
+movie_stats = None
+filtered_movies = None
+ratings = None
 
 genres = list(
     sorted(set([genre for genres in movies.Genres.unique() for genre in genres.split("|")]))
@@ -99,7 +108,7 @@ input_parsed_S = input_parsed_S[:,0:100]
 response = None
 
 def get_displayed_movies():
-    return movies.head(100)
+    return first100movies
 
 def get_recommended_movies(new_user_ratings):
     # getting temporary structure.
