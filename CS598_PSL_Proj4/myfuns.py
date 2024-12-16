@@ -1,4 +1,35 @@
 import pandas as pd
+import numpy as np
+
+def myIBCF(w,S, n = 10):      
+
+    # simularity already parsed
+
+    # nan to zero
+    S = np.nan_to_num(S, nan=0)
+    # where user did not rate
+    unrated_indices = np.where(np.isnan(w))[0]
+    # where user did rate
+    rated_indices = np.where(~np.isnan(w))[0]
+
+    recommend = np.zeros_like(w)
+    for i in unrated_indices:
+
+        # prediction formula
+        num = np.sum(S[i, rated_indices] * w[rated_indices])
+        den = np.sum(S[i, rated_indices])
+
+        # no divde by zero please
+        if den > 0: recommend[i] = num/den 
+        else: recommend[i] = 0
+    
+    value_recommended = (np.argsort(recommend)[::-1])[:n]   #top n values to recommend movie
+
+    if ~np.isnan(recommend).any():   #return if no nan elements
+        return value_recommended
+    else: 
+        # signaling that something is wrong
+        return [-1]
 
 # Define the URL for movie data
 myurl = "https://liangfgithub.github.io/MovieData/movies.dat?raw=true"
@@ -40,11 +71,30 @@ genres = list(
     sorted(set([genre for genres in movies.Genres.unique() for genre in genres.split("|")]))
 )
 
+# loading parsed S
+input_parsed_S = np.empty((0,3706))
+input_parsed_S[:] = np.nan
+for i in range(5):
+    input_parsed_S= np.append(input_parsed_S, np.load(f"CS598_PSL_Proj4\S_parsed_chunks\S_{i}.npy"), axis=0)
+
+
+
 def get_displayed_movies():
     return movies.head(100)
 
 def get_recommended_movies(new_user_ratings):
-    return movies.head(10)
+    # getting temporary structure.
+    wtemp = movies.iloc[0]
+    wtemp = wtemp.replace(wtemp.values, np.nan)
+    for key, value in new_user_ratings.items():
+        wtemp[key] = value
+    w = wtemp.values
+    results = myIBCF(w,input_parsed_S, n = 10)
+
+    if len(results) > 0 and results[0] == -1:
+        return top_10_movies
+    
+    return movies.iloc[results]
 
 def get_popular_movies(genre: str):
     return top_10_movies
