@@ -105,13 +105,9 @@ def get_recommended_movies(new_user_ratings):
     # getting temporary structure.
     wtemp = R_onerow.iloc[[0]].copy()
     wtemp = wtemp.replace(wtemp.values, np.nan)
-    print(wtemp)
     for key, value in new_user_ratings.items():
-        print(key, value)
         wtemp.loc["u1", f"m{key}"] = value
-    print(wtemp)
     w = wtemp.values[0]
-    print(w)
     results = myIBCF(w,input_parsed_S, n = 10)
 
     if len(results) > 0 and results[0] == -1:
