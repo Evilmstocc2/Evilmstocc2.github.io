@@ -75,7 +75,7 @@ genres = list(
 input_parsed_S = np.empty((0,3706))
 input_parsed_S[:] = np.nan
 for i in range(5):
-    input_parsed_S= np.append(input_parsed_S, np.load(f"CS598_PSL_Proj4\S_parsed_chunks\S_{i}.npy"), axis=0)
+    input_parsed_S= np.append(input_parsed_S, np.load(f"S_parsed_chunks\S_{i}.npy"), axis=0)
 
 
 

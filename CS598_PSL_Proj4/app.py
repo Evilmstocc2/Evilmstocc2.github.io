@@ -39,7 +39,7 @@ sidebar = html.Div(
         html.Hr(),
         dbc.Nav(
             [
-                dbc.NavLink("System 1 - Genre", href="/", active="exact"),
+                dbc.NavLink("System 1 - Popular", href="/", active="exact"),
                 dbc.NavLink("System 2 - Collaborative", href="/system-2", active="exact"),
             ],
             vertical=True,
@@ -60,14 +60,28 @@ def render_page_content(pathname):
     if pathname == "/":
         return html.Div(
             [
-                html.H1("Select a genre"),
-                dcc.Dropdown(
-                    id="genre-dropdown",
-                    options=[{"label": k, "value": k} for k in genres],
-                    value=None,
-                    className="mb-4",
-                ),
-                html.Div(id="genre-output", className=""),
+                # html.H1("Select a genre"),
+                # dcc.Dropdown(
+                #     id="genre-dropdown",
+                #     options=[{"label": k, "value": k} for k in genres],
+                #     value=None,
+                #     className="mb-4",
+                # ),
+                # html.Div(id="genre-output", className=""),
+
+                dbc.Row(
+                    [
+                        html.Div(
+                            [
+                                *[
+                                    get_movie_card(movie)
+                                    for idx, movie in get_popular_movies("nogenre").iterrows()
+                                ],
+                            ],
+                            className="row row-cols-1 row-cols-5",
+                        ),
+                    ]
+                )
             ]
         )
     elif pathname == "/system-2":
@@ -126,26 +140,26 @@ def render_page_content(pathname):
             ]
         )
 
-@app.callback(Output("genre-output", "children"), Input("genre-dropdown", "value"))
-def update_output(genre):
-    if genre is None:
-        return html.Div()
-    else: 
-        return [
-            dbc.Row(
-                [
-                    html.Div(
-                        [
-                            *[
-                                get_movie_card(movie)
-                                for idx, movie in get_popular_movies(genre).iterrows()
-                            ],
-                        ],
-                        className="row row-cols-1 row-cols-5",
-                    ),
-                ]
-            ),
-        ]
+# @app.callback(Output("genre-output", "children"), Input("genre-dropdown", "value"))
+# def update_output(genre):
+#     if genre is None:
+#         return html.Div()
+#     else: 
+#         return [
+#             dbc.Row(
+#                 [
+#                     html.Div(
+#                         [
+#                             *[
+#                                 get_movie_card(movie)
+#                                 for idx, movie in get_popular_movies(genre).iterrows()
+#                             ],
+#                         ],
+#                         className="row row-cols-1 row-cols-5",
+#                     ),
+#                 ]
+#             ),
+#         ]
 
 
     
