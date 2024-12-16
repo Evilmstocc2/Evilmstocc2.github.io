@@ -238,4 +238,4 @@ def update_button_recommened_visibility(values):
     return not list(filter(None, values))
 
 if __name__ == "__main__":
-    app.run_server(port=1000, debug=True)
+    app.run_server(port=10000, debug=True)
