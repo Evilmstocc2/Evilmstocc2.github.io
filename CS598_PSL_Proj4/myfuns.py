@@ -91,8 +91,7 @@ for i in range(5):
         print(f"S_{i} matrix failure")
 
 input_parsed_S = np.vstack(input_parsed_S_chunks)
-print(input_parsed_S)
-print(input_parsed_S.shape)
+
 # freeing space in memory just in case
 response = None
 
@@ -104,7 +103,7 @@ def get_recommended_movies(new_user_ratings):
     wtemp = movies.iloc[0]
     wtemp = wtemp.replace(wtemp.values, np.nan)
     for key, value in new_user_ratings.items():
-        wtemp[key].iloc[0] = value
+        wtemp[[key]].iloc[0] = value
     w = wtemp.values
     print(w)
     results = myIBCF(w,input_parsed_S, n = 10)
