@@ -36,6 +36,9 @@ def myIBCF(w,S, n = 10):
 # Define the URL for movie data
 myurl = "https://liangfgithub.github.io/MovieData/movies.dat?raw=true"
 myurlrating = "https://liangfgithub.github.io/MovieData/ratings.dat?raw=true"
+rmaturl = "https://github.com/Evilmstocc2/Evilmstocc2.github.io/raw/refs/heads/main/CS598_PSL_Proj4/single_R_Row.csv?raw=true"
+
+R_onerow = pd.read_csv(r"C:\Users\socra\OneDrive\Documents\College\CS598PSL\Project4\single_R_Row.csv", index_col=0)
 
 # Read ratings and movies data
 ratings = pd.read_csv(myurlrating, sep='::', engine='python',
@@ -100,12 +103,14 @@ def get_displayed_movies():
 
 def get_recommended_movies(new_user_ratings):
     # getting temporary structure.
-    wtemp = movies.iloc[0]
-    print(wtemp)
+    wtemp = R_onerow.iloc[[0]].copy()
     wtemp = wtemp.replace(wtemp.values, np.nan)
+    print(wtemp)
     for key, value in new_user_ratings.items():
-        wtemp.loc[0, key] = value
-    w = wtemp.values
+        print(key, value)
+        wtemp.loc["u1", f"m{key}"] = value
+    print(wtemp)
+    w = wtemp.values[0]
     print(w)
     results = myIBCF(w,input_parsed_S, n = 10)
 
