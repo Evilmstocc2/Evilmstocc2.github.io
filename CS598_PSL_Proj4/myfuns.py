@@ -38,7 +38,7 @@ myurl = "https://liangfgithub.github.io/MovieData/movies.dat?raw=true"
 myurlrating = "https://liangfgithub.github.io/MovieData/ratings.dat?raw=true"
 rmaturl = "https://github.com/Evilmstocc2/Evilmstocc2.github.io/raw/refs/heads/main/CS598_PSL_Proj4/single_R_Row.csv?raw=true"
 
-R_onerow = pd.read_csv(r"C:\Users\socra\OneDrive\Documents\College\CS598PSL\Project4\single_R_Row.csv", index_col=0)
+R_onerow = pd.read_csv(rmaturl, index_col=0)
 
 # Read ratings and movies data
 ratings = pd.read_csv(myurlrating, sep='::', engine='python',
