@@ -3,3 +3,6 @@ dash_bootstrap_components
 pandas
 numpy
 gunicorn
+requests
+tempfile
+os

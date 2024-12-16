@@ -1,8 +1,10 @@
 import pandas as pd
 import numpy as np
+import requests
+import tempfile
+import os
 
 def myIBCF(w,S, n = 10):      
-
     # simularity already parsed
 
     # nan to zero
@@ -72,12 +74,26 @@ genres = list(
 )
 
 # loading parsed S
-input_parsed_S = np.empty((0,3706))
-input_parsed_S[:] = np.nan
+input_parsed_S_chunks = []
+
+response = None
 for i in range(5):
-    input_parsed_S= np.append(input_parsed_S, np.load(f"S_parsed_chunks\S_{i}.npy"), axis=0)
+    # forced to use requests and tempfile here
+    response = requests.get(f"https://github.com/Evilmstocc2/Evilmstocc2.github.io/raw/refs/heads/main/CS598_PSL_Proj4/S_parsed_chunks/S_{i}.npy")
+    if response.status_code == 200:
+        temp_file_path = None
+        with tempfile.NamedTemporaryFile(suffix=".npy", delete=False) as temp_file:
+            temp_file.write(response.content) 
+            temp_file_path = temp_file.name
+        input_parsed_S_chunks.append(np.load(temp_file_path))
+        os.remove(temp_file_path)
+    else:
+        print(f"S_{i} matrix failure")
 
+input_parsed_S = np.vstack(input_parsed_S_chunks)
 
+# freeing space in memory just in case
+response = None
 
 def get_displayed_movies():
     return movies.head(100)
