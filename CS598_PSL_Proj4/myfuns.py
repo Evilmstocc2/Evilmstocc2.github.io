@@ -101,9 +101,10 @@ def get_displayed_movies():
 def get_recommended_movies(new_user_ratings):
     # getting temporary structure.
     wtemp = movies.iloc[0]
+    print(wtemp)
     wtemp = wtemp.replace(wtemp.values, np.nan)
     for key, value in new_user_ratings.items():
-        wtemp[[key]].iloc[0] = value
+        wtemp.loc[0, key] = value
     w = wtemp.values
     print(w)
     results = myIBCF(w,input_parsed_S, n = 10)
