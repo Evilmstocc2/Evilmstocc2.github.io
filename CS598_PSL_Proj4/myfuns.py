@@ -94,7 +94,7 @@ for i in range(5):
         print(f"S_{i} matrix failure")
 
 input_parsed_S = np.vstack(input_parsed_S_chunks)
-
+input_parsed_S = input_parsed_S[:,0:100]
 # freeing space in memory just in case
 response = None
 
